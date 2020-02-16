@@ -4,7 +4,6 @@ import com.movility.model.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -98,6 +97,7 @@ public class Resources {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         return connection;
     }
+
     private static Resources instance;
 
     private Resources(){}
