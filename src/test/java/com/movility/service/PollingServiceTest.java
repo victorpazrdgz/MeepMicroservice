@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ *  Class for do same simple test
+ */
 class PollingServiceTest {
     private Resources resources=Resources.getInstance();
     private Vehicle test;

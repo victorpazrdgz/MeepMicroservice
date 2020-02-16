@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 
+/**
+ * Principal class. Contain a timer for execute the method run of PollingService class
+ */
 @SpringBootApplication
 public class MeepApplication {
     private static final Logger logger = LogManager.getLogger(MeepApplication.class);

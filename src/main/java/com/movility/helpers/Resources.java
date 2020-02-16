@@ -10,6 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * This class contain resources that can use for others class.
+ */
 public class Resources {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -17,6 +20,11 @@ public class Resources {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     private static final Logger logger = LogManager.getLogger(Resources.class);
+
+    /**
+     * Method for create Uri( necesary modificate for do the application more escalable)
+     * @return
+     */
     public String createUri() {
         try {
             String newUri = UriComponentsBuilder.newInstance()
@@ -34,7 +42,12 @@ public class Resources {
     }
 
 
-
+    /**
+     *  Method for compare two list of vehicles
+     * @param origin
+     * @param destination
+     * @return
+     */
     public List<Vehicle> compareLists(List<Vehicle> origin, List<Vehicle> destination) {
 
         for (int i = 0; i < destination.size(); i++) {
@@ -72,6 +85,13 @@ public class Resources {
             System.out.println(ANSI_RED + " NAME of New Vehicles NOT Available " + notAvailableVehicles.get(i).getName() + ANSI_RESET);
 
     }
+
+    /**
+     *  Method For open conection to the endpoint
+     * @param uri
+     * @return
+     * @throws IOException
+     */
     public HttpURLConnection openconnectToUrl(String uri) throws IOException {
 
         URL url = new URL(uri);

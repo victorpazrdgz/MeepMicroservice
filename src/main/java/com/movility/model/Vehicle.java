@@ -1,5 +1,8 @@
 package com.movility.model;
 
+/**
+ * Model Class
+ */
 public class Vehicle {
     private String id;
     private String name;

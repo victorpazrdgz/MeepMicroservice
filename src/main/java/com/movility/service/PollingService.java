@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.TimerTask;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * This class connect to endpoint, parse the results and print the result in console
+ */
 public class PollingService extends TimerTask {
 
     private List<Vehicle> vehiclesNew = new ArrayList<Vehicle>();
@@ -72,6 +75,12 @@ public class PollingService extends TimerTask {
         }
     }
 
+    /**
+     *  Method for pass the result of call endpoint to Arraylist of type Vehicle
+     * @param vehicleList
+     * @return
+     * @throws ParseException
+     */
     public List<Vehicle> parseStringBuilder(StringBuilder vehicleList) throws ParseException {
        try {
            JSONParser parser = new JSONParser();
@@ -90,6 +99,9 @@ public class PollingService extends TimerTask {
         return vehiclesNew;
     }
 
+    /**
+     * Method for Know the new available  Vehicles
+     */
     private void compareChangesAvailable() {
        try {
            List<Vehicle> vehiclesNewAUX;
@@ -105,6 +117,9 @@ public class PollingService extends TimerTask {
 
     }
 
+    /**
+     * Method for Know the not available  Vehicles
+     */
     private void compareChangesNotAvailable() {
         try {
             List<Vehicle> vehiclesOldAUX;
