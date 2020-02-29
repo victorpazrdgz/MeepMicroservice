@@ -3,6 +3,7 @@ package com.movility.service;
 import com.google.gson.Gson;
 import com.movility.helpers.Resources;
 import com.movility.model.Vehicle;
+import com.movility.model.VehicleList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -20,13 +21,17 @@ import java.util.List;
 import java.util.TimerTask;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 /**
  * This class connect to endpoint, parse the results and print the result in console
  */
 @Service
-public class PollingServiceImpl extends TimerTask implements PollingService {
+public class PollingServiceImpl implements PollingService {
 
     private static List<Vehicle> vehiclesNew = new ArrayList<Vehicle>();
     private static List<Vehicle> vehiclesOld = new ArrayList<Vehicle>();
@@ -35,14 +40,16 @@ public class PollingServiceImpl extends TimerTask implements PollingService {
     private Resources resources = Resources.getInstance();
 
     private static final Logger logger = LogManager.getLogger(PollingServiceImpl.class);
-
-    public void run() {
+    @Scheduled(fixedDelay = 30000)
+    public void pollingSchedule() {
         try {
             String uri = resources.createUri();
             HttpURLConnection connection = resources.openconnectToUrl(uri);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
-
+//            WebClient webClient= WebClient.create(uri);
+//            Mono<VehicleList> result=  webClient.get().uri(uri).accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(VehicleList.class);
+//            System.out.println(result);
             if (connection.getResponseCode() == 200) {
                 StringBuilder vehicleList = new StringBuilder();
                 BufferedReader listVehicles = new BufferedReader(new InputStreamReader((connection.getInputStream())));
@@ -55,7 +62,6 @@ public class PollingServiceImpl extends TimerTask implements PollingService {
 
                 if ((vehiclesNew.size() > 0) && (vehiclesNew != null)) {
                     resources.printAvailable(vehiclesNew);
-
                     compareChangesAvailable();
                     compareChangesNotAvailable();
                     vehiclesOld = new ArrayList<Vehicle>(vehiclesNew);
@@ -69,13 +75,8 @@ public class PollingServiceImpl extends TimerTask implements PollingService {
                 logger.info("Response Message : " + connection.getResponseMessage());
             }
             connection.disconnect();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
