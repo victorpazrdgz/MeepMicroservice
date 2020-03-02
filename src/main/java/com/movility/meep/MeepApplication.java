@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 import java.io.IOException;
 import java.util.Timer;
 
@@ -16,20 +18,13 @@ import java.util.Timer;
  */
 @SpringBootApplication
 @ComponentScan("com.movility")
+@EnableScheduling
 public class MeepApplication {
     private static final Logger logger = LogManager.getLogger(MeepApplication.class);
 
     public static void main(String[] args) throws IOException, ParseException {
         SpringApplication.run(MeepApplication.class, args);
-        try {
-            PollingServiceImpl pollingService = new PollingServiceImpl();
-            Timer timer = new Timer();
-            Integer seconds = 30;
-            timer.scheduleAtFixedRate(pollingService, 0, 1000 * seconds);
-        } catch (Exception e) {
-            logger.info("Exception" + e);
-            e.printStackTrace();
-        }
+
     }
 
 }

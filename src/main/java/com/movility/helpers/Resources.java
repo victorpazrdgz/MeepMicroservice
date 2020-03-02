@@ -4,9 +4,11 @@ import com.movility.model.Vehicle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,29 +22,10 @@ public class Resources {
     public static final String ANSI_PURPLE = "\u001B[35m";
     private static final Logger logger = LogManager.getLogger(Resources.class);
 
-    /**
-     * Method for create Uri( necesary modificate for do the application more escalable)
-     * @return
-     */
-    public String createUri() {
-        try {
-            String newUri = UriComponentsBuilder.newInstance()
-                    .scheme("https").host("apidev.meep.me")
-                    .path("/tripplan/api/v1/routers/lisboa/resources").queryParam("lowerLeftLatLon", "38.711046,-9.160096").queryParam("upperRightLatLon", "38.739429,9.137115")
-                    .queryParam("companyZoneIds", "545,467,473").build().toUriString();
-
-            return newUri;
-        }
-        catch (Exception e) {
-            logger.info("Exception" + e);
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
     /**
-     *  Method for compare two list of vehicles
+     * Method for compare two list of vehicles
+     *
      * @param origin
      * @param destination
      * @return
@@ -55,12 +38,13 @@ public class Resources {
                     destination.remove(i);
             }
         }
+
         return destination;
     }
 
     public void printAvailable(List<Vehicle> availableVehicles) {
         System.out.println(ANSI_PURPLE + " **********************  VEHICLES AVAILABLE  **********************   " + ANSI_RESET);
-        System.out.println(ANSI_PURPLE + "  Number of vehicles available    : " +  availableVehicles.size() + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "  Number of vehicles available    : " + availableVehicles.size() + ANSI_RESET);
 
         for (int i = 0; i < availableVehicles.size(); i++)
             System.out.println(ANSI_GREEN + " Name Vehicle   : " + availableVehicles.get(i).getName() + ANSI_RESET);
@@ -86,24 +70,29 @@ public class Resources {
     }
 
     /**
-     *  Method For open conection to the endpoint
-     * @param uri
+     * Method for pass list to string for use in createUri
+     * @param companyZone
      * @return
-     * @throws IOException
      */
-    public HttpURLConnection openconnectToUrl(String uri) throws IOException {
-
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        return connection;
+    public String createStringList(List<Integer> companyZone) {
+        StringBuilder companyZoneId = new StringBuilder();
+        Iterator<Integer> iter = companyZone.iterator();
+        while (iter.hasNext()) {
+            companyZoneId.append(iter.next());
+            if (iter.hasNext()) {
+                companyZoneId.append(",");
+            }
+        }
+        return companyZoneId.toString();
     }
 
     private static Resources instance;
 
-    private Resources(){}
+    private Resources() {
+    }
 
-    public static Resources getInstance(){
-        if(instance == null){
+    public static Resources getInstance() {
+        if (instance == null) {
             instance = new Resources();
         }
         return instance;
